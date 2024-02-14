@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,13 +47,14 @@ public class BoardController {
 	 * @return テンプレート
 	 */
 	@PostMapping("/create")
-	public String create(@ModelAttribute("form") Post form, BindingResult result,
-			Model model) {
+	public String create(@ModelAttribute("form") @Validated Post form, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("form", form);
+			model = this.setList(model);
+			model.addAttribute("path", "create");
+			return "layout";
+		}
 		repository.saveAndFlush(PostFactory.createPost(form));
-		//		model.addAttribute("form", PostFactory.newPost());
-		//		model = this.setList(model);
-		//		model.addAttribute("path", "create");
-		//		return "layout";
 		return "redirect:/";
 	}
 
@@ -80,14 +82,18 @@ public class BoardController {
 	 * @return テンプレート
 	 */
 	@PostMapping("/update")
-	public String update(@ModelAttribute("form") Post form, Model model) {
+	public String update(@ModelAttribute("form") @Validated Post form, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("form", form);
+			model = setList(model);
+			model.addAttribute("path", "update");
+			return "layout";
+		}
 		Optional<Post> post = repository.findById(form.getId());
 		repository.saveAndFlush(PostFactory.updatePost(post.get(), form));
-		//		model.addAttribute("form", PostFactory.newPost());
-		//		model = setList(model);
-		//		model.addAttribute("path", "create");
-		//		return "layout";
+		
 		return "redirect:/";
+
 	}
 
 	/**
@@ -101,10 +107,6 @@ public class BoardController {
 	public String delete(@ModelAttribute("form") Post form, Model model) {
 		Optional<Post> post = repository.findById(form.getId());
 		repository.saveAndFlush(PostFactory.deletePost(post.get()));
-//		model.addAttribute("form", PostFactory.newPost());
-//		model = setList(model);
-//		model.addAttribute("path", "create");
-//		return "layout";
 		return "redirect:/";
 	}
 
