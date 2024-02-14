@@ -48,10 +48,11 @@ public class BoardController {
 	public String create(@ModelAttribute("form") Post form, BindingResult result,
 			Model model) {
 		repository.saveAndFlush(PostFactory.createPost(form));
-		model.addAttribute("form", PostFactory.newPost());
-		model = this.setList(model);
-		model.addAttribute("path", "create");
-		return "layout";
+//		model.addAttribute("form", PostFactory.newPost());
+//		model = this.setList(model);
+//		model.addAttribute("path", "create");
+//		return "layout";
+		return "redirect:/";
 	}
 
 	/**
