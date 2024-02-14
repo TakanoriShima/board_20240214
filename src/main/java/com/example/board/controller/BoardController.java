@@ -83,6 +83,24 @@ public class BoardController {
 	public String update(@ModelAttribute("form") Post form, Model model) {
 		Optional<Post> post = repository.findById(form.getId());
 		repository.saveAndFlush(PostFactory.updatePost(post.get(), form));
+		//		model.addAttribute("form", PostFactory.newPost());
+		//		model = setList(model);
+		//		model.addAttribute("path", "create");
+		//		return "layout";
+		return "redirect:/";
+	}
+
+	/**
+	* 削除する
+	*
+	* @param form  フォーム
+	* @param model モデル
+	* @return テンプレート
+	*/
+	@GetMapping(value = "/delete")
+	public String delete(@ModelAttribute("form") Post form, Model model) {
+		Optional<Post> post = repository.findById(form.getId());
+		repository.saveAndFlush(PostFactory.deletePost(post.get()));
 //		model.addAttribute("form", PostFactory.newPost());
 //		model = setList(model);
 //		model.addAttribute("path", "create");
