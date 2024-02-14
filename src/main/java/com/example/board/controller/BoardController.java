@@ -83,10 +83,11 @@ public class BoardController {
 	public String update(@ModelAttribute("form") Post form, Model model) {
 		Optional<Post> post = repository.findById(form.getId());
 		repository.saveAndFlush(PostFactory.updatePost(post.get(), form));
-		model.addAttribute("form", PostFactory.newPost());
-		model = setList(model);
-		model.addAttribute("path", "create");
-		return "layout";
+//		model.addAttribute("form", PostFactory.newPost());
+//		model = setList(model);
+//		model.addAttribute("path", "create");
+//		return "layout";
+		return "redirect:/";
 	}
 
 	/**
